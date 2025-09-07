@@ -66,7 +66,20 @@ public:
     bool search(string word)
     {
         // TODO: Implement this function
-        return false; // placeholder
+        int c = 0;
+        TrieNode *temp = root;
+        while (c < word.size())
+        {
+            int index = word[c] - 'a';
+            temp = temp->children[index];
+            if (temp == nullptr)
+            {
+                return false;
+            }
+            c++;
+        }
+        // To check if the final character is the end.
+        return temp->isEndOfWord;
     }
 
     // Check if any word starts with the given prefix
