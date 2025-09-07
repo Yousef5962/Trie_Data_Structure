@@ -57,6 +57,16 @@ public:
     void insert(string word)
     {
         // TODO: Implement this function
+        TrieNode* node = root;
+        for (char c : word) {
+            int index = c - 'a';
+            if (index < 0 || index >= 26) continue;
+            if (!node->children[index]) {
+                node->children[index] = new TrieNode();
+            }
+            node = node->children[index];
+        }
+        node->isEndOfWord = true;        
     }
 
     // Search for a word in the Trie
