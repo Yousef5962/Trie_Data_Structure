@@ -67,7 +67,20 @@ public:
     // Purpose: Verify if the prefix exists in the Trie (doesn't need to be a complete word)
     bool startsWith(string prefix) {
         // TODO: Implement this function
-        return false; // placeholder
+        TrieNode* node = root; // start at the root and search in the children
+
+        for(char ch : prefix) 
+        {
+            int index = ch -'a';// get letter place in the array
+            if(node->children[index] == nullptr) // letter doesnt exists
+            {
+                return false;
+            }
+
+            node = node->children[index]; // move to the child node and search in its children for the next letter 
+        }
+
+        return true; // if it exits the loop then prefix is found 
     }
     
     // Get all words that start with the given prefix
