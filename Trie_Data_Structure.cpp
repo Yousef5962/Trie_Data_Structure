@@ -28,6 +28,7 @@ public:
 class Trie
 {
 private:
+    string longestWord = "";
     int numWords = 0;
     TrieNode *root;
 
@@ -84,6 +85,10 @@ public:
     {
         word = tolowercase(word);
         // TODO: Implement this function
+        if (word.length() > longestWord.length())
+        {
+            longestWord = word;
+        }
         TrieNode *node = root;
         for (char c : word)
         {
@@ -100,9 +105,12 @@ public:
         node->isEndOfWord = true;
     }
 
-    int countWords()
-    {
+    int countWords(){
         return numWords;
+    }
+
+    string longest(){
+        return longestWord;
     }
 
     // Search for a word in the Trie
@@ -209,6 +217,8 @@ int main()
     cout << "==============================" << endl;
     cout << "number of words: "<< trie.countWords() << endl;
     cout << "==============================" << endl;
+    cout << "Longest word: " << trie.longest() << endl;
+    cout << "==============================" << endl;
     // Test search for existing words
     for (const string &word : words)
     {
@@ -307,6 +317,8 @@ int main()
     }
     cout << "==============================" << endl;
     cout << "number of words: "<< trie.countWords() << endl;
+    cout << "==============================" << endl;
+    cout << "Longest word: " << trie.longest() << endl;
     cout << "==============================" << endl;
     // Test search for new words
     for (const string &word : additionalWords)
