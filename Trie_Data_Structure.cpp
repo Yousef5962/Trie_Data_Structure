@@ -58,9 +58,11 @@ private:
         }
     }
 
-    string tolowercase(string word){
+    string tolowercase(string word)
+    {
         string result = word;
-        for(char& c: result){
+        for (char &c : result)
+        {
             c = tolower(c);
         }
         return result;
@@ -105,11 +107,13 @@ public:
         node->isEndOfWord = true;
     }
 
-    int countWords(){
+    int countWords()
+    {
         return numWords;
     }
 
-    string longest(){
+    string longest()
+    {
         return longestWord;
     }
 
@@ -191,6 +195,34 @@ public:
         findAllWords(auto_Current, lowerPrefix, suggestions);
         return suggestions;
     }
+
+    vector<string> spellchecking(string word)
+    {
+        vector<string> suggestions;
+
+        if (word.empty()) // if empty input, return nothing
+        {
+            return suggestions;
+        }
+
+        word = tolowercase(word);
+        string prefix = "";
+        TrieNode *node = root;
+
+        for (char ch : word)
+        {
+            int index = ch - 'a';
+            if (index < 0 || index >= 26 || node->children[index] == nullptr)
+            {
+                break;
+            }
+            node = node->children[index];
+            prefix += ch;
+        }
+
+        findAllWords(node, prefix, suggestions);
+        return suggestions;
+    }
 };
 
 // Main function
@@ -215,7 +247,7 @@ int main()
         cout << "Inserted: " << word << endl;
     }
     cout << "==============================" << endl;
-    cout << "number of words: "<< trie.countWords() << endl;
+    cout << "number of words: " << trie.countWords() << endl;
     cout << "==============================" << endl;
     cout << "Longest word: " << trie.longest() << endl;
     cout << "==============================" << endl;
@@ -316,7 +348,7 @@ int main()
         cout << "Inserted: " << word << endl;
     }
     cout << "==============================" << endl;
-    cout << "number of words: "<< trie.countWords() << endl;
+    cout << "number of words: " << trie.countWords() << endl;
     cout << "==============================" << endl;
     cout << "Longest word: " << trie.longest() << endl;
     cout << "==============================" << endl;
@@ -361,6 +393,31 @@ int main()
     {
         bool found = trie.search(word);
         cout << "Search '" << word << "': " << (found ? "FOUND" : "NOT FOUND") << endl;
+    }
+
+    // Test 7: Spellchecking functionality
+    cout << "\n7. Testing spellchecking functionality:" << endl;
+    cout << "========================================" << endl;
+
+    vector<string> checkWords = {"app", "appl", "ban", "ora", "grap", "kiw", ""};
+    for (const string &word : checkWords)
+    {
+        vector<string> suggestions = trie.spellchecking(word);
+        cout << "Spellcheck suggestions for '" << word << "': ";
+        if (suggestions.empty())
+        {
+            cout << "No suggestions found";
+        }
+        else
+        {
+            for (size_t i = 0; i < suggestions.size(); i++)
+            {
+                if (i > 0)
+                    cout << ", ";
+                cout << suggestions[i];
+            }
+        }
+        cout << endl;
     }
 
     cout << "\n=== ALL TESTS COMPLETED ===" << endl;
