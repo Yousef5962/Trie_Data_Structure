@@ -36,7 +36,24 @@ private:
     // Purpose: Recursively find all complete words starting from the given node
     void findAllWords(TrieNode *node, string currentWord, vector<string> &results)
     {
-        // TODO: Implement this function
+        if (node == nullptr)
+            return;
+
+        // If this node represents the end of a word, save it
+        if (node->isEndOfWord)
+        {
+            results.push_back(currentWord);
+        }
+
+        // Explore all possible children (a–z)
+        for (int i = 0; i < 26; i++)
+        {
+            if (node->children[i] != nullptr)
+            {
+                char nextChar = 'a' + i;
+                findAllWords(node->children[i], currentWord + nextChar, results);
+            }
+        }
     }
 
 public:
@@ -57,16 +74,19 @@ public:
     void insert(string word)
     {
         // TODO: Implement this function
-        TrieNode* node = root;
-        for (char c : word) {
+        TrieNode *node = root;
+        for (char c : word)
+        {
             int index = c - 'a';
-            if (index < 0 || index >= 26) continue;
-            if (!node->children[index]) {
+            if (index < 0 || index >= 26)
+                continue;
+            if (!node->children[index])
+            {
                 node->children[index] = new TrieNode();
             }
             node = node->children[index];
         }
-        node->isEndOfWord = true;        
+        node->isEndOfWord = true;
     }
 
     // Search for a word in the Trie
