@@ -399,7 +399,7 @@ int main()
     cout << "\n7. Testing spellchecking functionality:" << endl;
     cout << "========================================" << endl;
 
-    vector<string> checkWords = {"app", "appl", "ban", "ora", "grap", "kiw", ""};
+    vector<string> checkWords = {"appple", "apples", "ban", "orakle", "grapfruit", "kiwe","baan", ""};
     for (const string &word : checkWords)
     {
         vector<string> suggestions = trie.spellchecking(word);
