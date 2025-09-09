@@ -28,6 +28,7 @@ public:
 class Trie
 {
 private:
+    int numWords = 0;
     TrieNode *root;
 
     // Helper function to find all words from a node
@@ -56,6 +57,14 @@ private:
         }
     }
 
+    string tolowercase(string word){
+        string result = word;
+        for(char& c: result){
+            c = tolower(c);
+        }
+        return result;
+    }
+
 public:
     // Constructor
     // Input: none
@@ -73,6 +82,7 @@ public:
     // Purpose: Add a word to the Trie by creating nodes for each character
     void insert(string word)
     {
+        word = tolowercase(word);
         // TODO: Implement this function
         TrieNode *node = root;
         for (char c : word)
@@ -86,7 +96,13 @@ public:
             }
             node = node->children[index];
         }
+        numWords++;
         node->isEndOfWord = true;
+    }
+
+    int countWords()
+    {
+        return numWords;
     }
 
     // Search for a word in the Trie
@@ -95,6 +111,7 @@ public:
     // Purpose: Check if the complete word exists in the Trie
     bool search(string word)
     {
+        word = tolowercase(word);
         // TODO: Implement this function
         int c = 0;
         TrieNode *temp = root;
@@ -119,6 +136,7 @@ public:
     bool startsWith(string prefix)
     {
         // TODO: Implement this function
+        prefix = tolowercase(prefix);
         TrieNode *node = root; // start at the root and search in the children
 
         for (char ch : prefix)
@@ -141,6 +159,7 @@ public:
     // Purpose: Find all complete words that begin with the given prefix
     vector<string> autocomplete(string prefix)
     {
+        prefix = tolowercase(prefix);
         vector<string> suggestions;
         TrieNode *auto_Current = root;
 
@@ -187,7 +206,9 @@ int main()
         trie.insert(word);
         cout << "Inserted: " << word << endl;
     }
-
+    cout << "==============================" << endl;
+    cout << "number of words: "<< trie.countWords() << endl;
+    cout << "==============================" << endl;
     // Test search for existing words
     for (const string &word : words)
     {
@@ -284,7 +305,9 @@ int main()
         trie.insert(word);
         cout << "Inserted: " << word << endl;
     }
-
+    cout << "==============================" << endl;
+    cout << "number of words: "<< trie.countWords() << endl;
+    cout << "==============================" << endl;
     // Test search for new words
     for (const string &word : additionalWords)
     {
