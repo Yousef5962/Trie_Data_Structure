@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 #include <string>
 using namespace std;
 
@@ -28,7 +29,7 @@ public:
 class Trie
 {
 private:
-    string longestWord = "";
+    unordered_set<string> words;
     int numWords = 0;
     TrieNode *root;
 
@@ -87,10 +88,7 @@ public:
     {
         word = tolowercase(word);
         // TODO: Implement this function
-        if (word.length() > longestWord.length())
-        {
-            longestWord = word;
-        }
+        words.insert(word);
         TrieNode *node = root;
         for (char c : word)
         {
@@ -107,6 +105,47 @@ public:
         node->isEndOfWord = true;
     }
 
+    void remove(string word)
+    {
+        if (words.find(word) != words.end())
+        {
+            words.erase(word);
+        }
+        if (search(word) == false)
+        {
+            cout << "Word is not found" << endl;
+            return;
+        }
+        int index = word[0] - 'a';
+        TrieNode *temp = root->children[index];
+        TrieNode *next = root;
+        for (int i = 1; i < word.size(); i++)
+        {
+            int index = word[i] - 'a';
+            next = temp->children[index];
+            if (i != word.size() - 1)
+            {
+                temp = next;
+            }
+        }
+        // in case of the end character has children. we are going to remove the end sign only to not affect any after words in the row.
+        for (int i = 0; i < 26; i++)
+        {
+            if (next->children[i] != nullptr)
+            {
+                next->isEndOfWord = false;
+                cout << word << " removed." << endl;
+                return;
+            }
+        }
+        // if the last character in the word we want to delete is has no children. we have got no problem if we delete it and se the previous character to nullptr.
+        next->isEndOfWord = false;
+        delete next;
+        int index2 = word[word.size() - 1] - 'a';
+        temp->children[index2] = nullptr;
+        cout << word << " removed." << endl;
+    }
+
     int countWords()
     {
         return numWords;
@@ -114,6 +153,14 @@ public:
 
     string longest()
     {
+        string longestWord = "";
+        for (string word : words)
+        {
+            if (word.length() > longestWord.length())
+            {
+                longestWord = word;
+            }
+        }
         return longestWord;
     }
 
@@ -251,6 +298,8 @@ int main()
     cout << "==============================" << endl;
     cout << "Longest word: " << trie.longest() << endl;
     cout << "==============================" << endl;
+    trie.remove("app");
+    cout << "==============================" << endl;
     // Test search for existing words
     for (const string &word : words)
     {
@@ -352,6 +401,11 @@ int main()
     cout << "==============================" << endl;
     cout << "Longest word: " << trie.longest() << endl;
     cout << "==============================" << endl;
+    trie.remove("application");
+    cout << "==============================" << endl;
+    cout << "Longest word: " << trie.longest() << endl;
+    cout << "==============================" << endl;
+
     // Test search for new words
     for (const string &word : additionalWords)
     {
@@ -399,7 +453,7 @@ int main()
     cout << "\n7. Testing spellchecking functionality:" << endl;
     cout << "========================================" << endl;
 
-    vector<string> checkWords = {"appple", "apples", "ban", "orakle", "grapfruit", "kiwe","baan", ""};
+    vector<string> checkWords = {"appple", "apples", "ban", "orakle", "grapfruit", "kiwe", "baan", ""};
     for (const string &word : checkWords)
     {
         vector<string> suggestions = trie.spellchecking(word);
