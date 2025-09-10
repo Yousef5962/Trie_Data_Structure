@@ -107,6 +107,7 @@ public:
 
     void remove(string word)
     {
+        word = tolowercase(word);
         if (words.find(word) != words.end())
         {
             words.erase(word);
@@ -116,6 +117,7 @@ public:
             cout << "Word is not found" << endl;
             return;
         }
+        numWords--;
         int index = word[0] - 'a';
         TrieNode *temp = root->children[index];
         TrieNode *next = root;
